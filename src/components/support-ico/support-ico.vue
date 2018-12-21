@@ -14,7 +14,7 @@
       }
     },
     computed: {
-      //动态绑定class类名
+      // 动态绑定class类名
       iconCls () {
         const classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
         return `icon-${this.size} ${classMap[this.type]}`

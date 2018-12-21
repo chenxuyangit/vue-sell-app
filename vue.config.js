@@ -51,10 +51,11 @@ module.exports = {
       })
     }
   },
-  //设置路径为绝对路径
+  // 设置路径为绝对路径
   chainWebpack(config){
     config.resolve.alias
       .set('components', resolve('src/components'))
       .set('common', resolve('src/common'))
+      .set('api', resolve('src/api'))
   }
 }

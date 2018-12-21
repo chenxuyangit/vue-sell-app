@@ -34,28 +34,29 @@
 
 <script type="text/ecmascript-6">
   import SupportIco from 'components/support-ico/support-ico'
+
   export default {
     name: 'v-header',
     props: {
       seller: {
         type: Object,
-        default() {
+        default () {
           return {}
         }
       }
     },
     methods: {
-      //这里不知道是个什么
-      // showDetail() {
-      //   this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
-      //     $props: {
-      //       seller: 'seller'
-      //     }
-      //   })
-      //   this.headerDetailComp.show()
-      // }
+      // 这里不知道是个什么
+      showDetail () {
+        // this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
+        //   $props: {
+        //     seller: 'seller'
+        //   }
+        // })
+        // this.headerDetailComp.show()
+      }
     },
-    component: {
+    components: {
       SupportIco
     }
   }
