@@ -46,14 +46,15 @@
       }
     },
     methods: {
-      // 这里不知道是个什么
-      showDetail () {
-        // this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
-        //   $props: {
-        //     seller: 'seller'
-        //   }
-        // })
-        // this.headerDetailComp.show()
+      // cube-ui 创建的一个实例对象
+      // https://didi.github.io/cube-ui/#/zh-CN/docs/create-api
+      showDetail() {
+        this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
+          $props: {
+            seller: 'seller'
+          }
+        })
+        this.headerDetailComp.show()
       }
     },
     components: {
