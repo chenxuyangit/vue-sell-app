@@ -62,6 +62,7 @@
       return {
         goods: [],
         selectedFood: {},
+        // 这里还不太清楚------------------------------
         scrollOptions: {
           click: false,
           directionLockThreshold: 0

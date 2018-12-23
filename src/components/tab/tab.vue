@@ -50,13 +50,14 @@
     data () {
       return {
         // index : this.initialIndex
-        index: 0,
+        index: 1,
         slideOptions: {
           listenScroll: true,
           probeType: 3
         }
       }
     },
+    // 第一次加载。手动触发onchange加载页面
     mounted() {
       this.onChange(this.index)
     },
