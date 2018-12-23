@@ -3,11 +3,11 @@
   <div class="tab">
     <cube-tab-bar
       v-model="selectedLabelDefault"
-    :useTransition=false
-    :showSlider=true
-    :data="tabs"
-    ref="tabBar"
-    class="border-bottom-1px"
+      :useTransition=false
+      :showSlider=true
+      :data="tabs"
+      ref="tabBar"
+      class="border-bottom-1px"
     >
     </cube-tab-bar>
     <div class="slide-wrapper">
@@ -21,14 +21,9 @@
         @scroll="onScroll"
         :options="slideOptions"
       >
-        <cube-slide-item>
-          <goods></goods>
-        </cube-slide-item>
-        <cube-slide-item>
-          <ratings></ratings>
-        </cube-slide-item>
-        <cube-slide-item>
-          <seller></seller>
+        <!--抽象tab组件 -->
+        <cube-slide-item v-for="(tab,index) in tabs" :key="index">
+          <component :is="tab.component" :data="tab.data"></component>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -36,22 +31,25 @@
 </template>
 
 <script>
-  import Goods from '../goods/goods'
-  import Ratings from '../ratings/ratings'
-  import Seller from '../seller/seller'
 
   export default {
     name: 'tabs',
+    props: {
+      tabs: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      // 可以扩展初始显示页面
+      initialIndex: {
+        type: Number,
+        default: 2
+      }
+    },
     data () {
       return {
-        index: 0,
-        tabs: [{
-          label: '商品'
-        }, {
-          label: '评价'
-        }, {
-          label: '商家'
-        }],
+        index: this.initialIndex,
         slideOptions: {
           listenScroll: true,
           probeType: 3
@@ -60,9 +58,8 @@
     },
     methods: {
       // 需要和头部联动
-      //
       onChange (current) {
-        console.log(current)
+        // console.log(current)
         this.index = current
       },
       onScroll (pos) {
@@ -71,7 +68,7 @@
         const slideWidth = this.$refs.slide.slide.scrollerWidth
         const transform = -pos.x / slideWidth * tabBarWidth
         this.$refs.tabBar.setSliderTransform(transform)
-        console.log(this.$refs.tabBar)
+        // console.log(this.$refs.tabBar)
       }
 
     },
@@ -86,11 +83,6 @@
           })
         }
       }
-    },
-    components: {
-      Goods,
-      Ratings,
-      Seller
     }
   }
 </script>
