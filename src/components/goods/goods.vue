@@ -41,16 +41,25 @@
         </cube-scroll-nav-panel>
       </cube-scroll-nav>
     </div>
-    <!--<div class="shop-cart-warpper"></div>-->
+    <div class="shop-cart-wrapper">
+      <shop-cart
+        ref="shopCart"
+        :select-food="selectedFoods"
+        :delivery-price="seller.deliveryPrice"
+        :min-price="seller.minPrice"
+      >
+      </shop-cart>
+    </div>
   </div>
 </template>
 
 <script>
   import { getGoods } from 'api'
+  import ShopCart from 'components/shop-cart/shop-cart'
 
   export default {
     name: 'goods',
-    porps: {
+    props: {
       data: {
         type: Object,
         default () {
@@ -69,6 +78,11 @@
         }
       }
     },
+    computed: {
+      seller () {
+        return this.data.seller
+      }
+    },
     methods: {
       fetch () {
         getGoods().then((goods) => {
@@ -76,6 +90,9 @@
           // console.log(this.goods)
         })
       }
+    },
+    components: {
+      ShopCart
     }
   }
 </script>
@@ -174,12 +191,11 @@
         position: absolute
         right: 0
         bottom: 12px
-
-  /*.shop-cart-wrapper*/
-  /*position: absolute*/
-  /*left: 0*/
-  /*bottom: 0*/
-  /*z-index: 50*/
-  /*width: 100%*/
-  /*height: 48px*/
+    .shop-cart-wrapper
+      position: absolute
+      left: 0
+      bottom: 0
+      z-index: 50
+      width: 100%
+      height: 48px
 </style>
