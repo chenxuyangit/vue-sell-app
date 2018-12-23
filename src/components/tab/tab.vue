@@ -1,11 +1,13 @@
 <template>
+  <!-- useTransition false 禁止调用默认的transition -->
   <div class="tab">
     <cube-tab-bar
       v-model="selectedLabelDefault"
-      :showSlider=true
-      :data="tabs"
-      ref:="tabBar"
-      class="border-bottom-1px"
+    :useTransition=false
+    :showSlider=true
+    :data="tabs"
+    ref="tabBar"
+    class="border-bottom-1px"
     >
     </cube-tab-bar>
     <div class="slide-wrapper">
@@ -15,6 +17,9 @@
         :show-dots=false
         :initial-index="index"
         ref="slide"
+        @change="onChange"
+        @scroll="onScroll"
+        :options="slideOptions"
       >
         <cube-slide-item>
           <goods></goods>
@@ -46,16 +51,29 @@
           label: '评价'
         }, {
           label: '商家'
-        }]
+        }],
+        slideOptions: {
+          listenScroll: true,
+          probeType: 3
+        }
       }
     },
     methods: {
-      clickHandler () {
-        console.log(1)
+      // 需要和头部联动
+      //
+      onChange (current) {
+        console.log(current)
+        this.index = current
       },
-      changeHandler () {
-        console.log(2)
+      onScroll (pos) {
+        // 设置滚动的距离
+        const tabBarWidth = this.$refs.tabBar.$el.clientWidth
+        const slideWidth = this.$refs.slide.slide.scrollerWidth
+        const transform = -pos.x / slideWidth * tabBarWidth
+        this.$refs.tabBar.setSliderTransform(transform)
+        console.log(this.$refs.tabBar)
       }
+
     },
     computed: {
       selectedLabelDefault: {
