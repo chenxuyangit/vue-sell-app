@@ -31,9 +31,9 @@
 </template>
 
 <script>
-  import Goods from 'components/goods/goods'
-  import Ratings from 'components/ratings/ratings'
-  import Seller from 'components/seller/seller'
+  import Goods from '../goods/goods'
+  import Ratings from '../ratings/ratings'
+  import Seller from '../seller/seller'
 
   export default {
     name: 'tabs',
@@ -69,7 +69,7 @@
         }
       }
     },
-    component: {
+    components: {
       Goods,
       Ratings,
       Seller
