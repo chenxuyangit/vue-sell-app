@@ -1,12 +1,12 @@
-//node
-const webpack = require('webpack')
+// node
+// const webpack = require('webpack')
 const path = require('path')
 
 const appData = require('./data.json')
 const seller = appData.seller
 const goods = appData.goods
 const ratings = appData.ratings
-//拼接路径
+// 拼接路径
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -28,7 +28,7 @@ module.exports = {
       theme: true
     }
   },
-  //模拟数据
+  // 模拟数据
   devServer: {
     before (app) {
       app.get('/api/seller', function (req, res) {

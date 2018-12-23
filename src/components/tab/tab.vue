@@ -23,7 +23,7 @@
       >
         <!--抽象tab组件 -->
         <cube-slide-item v-for="(tab,index) in tabs" :key="index">
-          <component :is="tab.component" :data="tab.data"></component>
+          <component ref="component" :is="tab.component" :data="tab.data"></component>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -44,23 +44,30 @@
       // 可以扩展初始显示页面
       initialIndex: {
         type: Number,
-        default: 2
+        default: 0
       }
     },
     data () {
       return {
-        index: this.initialIndex,
+        // index : this.initialIndex
+        index: 0,
         slideOptions: {
           listenScroll: true,
           probeType: 3
         }
       }
     },
+    mounted() {
+      this.onChange(this.index)
+    },
     methods: {
       // 需要和头部联动
       onChange (current) {
         // console.log(current)
         this.index = current
+        // scroll--nav component在上面v-for之后这里是个数组
+        const component = this.$refs.component[current]
+        component.fetch && component.fetch()
       },
       onScroll (pos) {
         // 设置滚动的距离
@@ -70,7 +77,6 @@
         this.$refs.tabBar.setSliderTransform(transform)
         // console.log(this.$refs.tabBar)
       }
-
     },
     computed: {
       selectedLabelDefault: {
@@ -96,5 +102,8 @@
     height: 100%
     >>> .cube-tab
       padding: 10px 0
+      overflow: hidden
+    .slide-wrapper
+      flex: 1
       overflow: hidden
 </style>

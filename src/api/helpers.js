@@ -11,7 +11,7 @@ export function get (url) {
     }).then((res) => {
       const { errno, data } = res.data
       if (errno === ERR_OK) {
-        console.log(res.data)
+        // console.log(res.data)
         return data
       }
     }).catch((e) => {
