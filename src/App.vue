@@ -3,7 +3,7 @@
     <v-header :seller="seller"></v-header>
     <div class="tab-wrapper">
       <tab :tabs="tabs"></tab>
-      <!--:initialIndex=1-->
+      <!-- 可扩展 选择初始页面:initialIndex=1-->
     </div>
   </div>
 </template>

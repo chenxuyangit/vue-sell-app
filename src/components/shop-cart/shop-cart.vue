@@ -8,7 +8,7 @@
               <i class="icon-shopping_cart" :class="{'highlight':totalCount>0}"></i>
             </div>
             <div class="num" v-show="totalCount>0">
-              <!--<bubble :num="totalCount"></bubble>-->
+              <bubble :num="totalCount"></bubble>
             </div>
           </div>
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+  import Bubble from 'components/bubble/bubble'
+
   export default {
     name: 'shop-cart',
     props: {
@@ -46,43 +48,46 @@
         default: 0
       }
     },
-    // computed: {
-    //   // 计算总金额
-    //   totalPrice () {
-    //     let total = 0
-    //     this.selectFoods.forEach((food) => {
-    //       total += food.price * food.count
-    //     })
-    //     return total
-    //   },
-    //   // 计算商品总数
-    //   totalCount () {
-    //     let count = 0
-    //     this.selectedFood.forEach((food) => {
-    //       count += food.count
-    //     })
-    //     return count
-    //   },
-    //   // 判断还差多少前可以结算
-    //   payDesc () {
-    //     if (this.totalPrice === 0) {
-    //       return `¥${this.minPrice}元起送`
-    //     } else if (this.totalPrice < this.minPrice) {
-    //       let diff = this.minPrice - this.totalPrice
-    //       return `还差¥${diff}元起送`
-    //     } else {
-    //       return '去结算'
-    //     }
-    //   },
-    //   // 结算状态点亮
-    //   payClass () {
-    //     if (!this.totalCount || this.totalCount < this.minPrice) {
-    //       return 'no-enough'
-    //     } else {
-    //       return 'enough'
-    //     }
-    //   }
-    // }
+    computed: {
+      // 计算总金额
+      totalPrice () {
+        let total = 0
+        this.selectFoods.forEach((food) => {
+          total += food.price * food.count
+        })
+        return total
+      },
+      // 计算商品总数
+      totalCount () {
+        let count = 0
+        this.selectFoods.forEach((food) => {
+          count += food.count
+        })
+        return count
+      },
+      // 判断还差多少前可以结算
+      payDesc () {
+        if (this.totalPrice === 0) {
+          return `¥${this.minPrice}元起送`
+        } else if (this.totalPrice < this.minPrice) {
+          let diff = this.minPrice - this.totalPrice
+          return `还差¥${diff}元起送`
+        } else {
+          return '去结算'
+        }
+      },
+      // 结算状态点亮
+      payClass () {
+        if (!this.totalCount || this.totalCount < this.minPrice) {
+          return 'no-enough'
+        } else {
+          return 'enough'
+        }
+      }
+    },
+    components: {
+      Bubble
+    }
   }
 </script>
 

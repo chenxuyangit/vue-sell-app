@@ -33,7 +33,8 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cart-control-wrapper">
-                  <!--<cart-control @add="onAdd" :food="food"></cart-control>-->
+                  <!-- cart-contol 组件-->
+                  <cart-control :food="food"></cart-control>
                 </div>
               </div>
             </li>
@@ -42,9 +43,10 @@
       </cube-scroll-nav>
     </div>
     <div class="shop-cart-wrapper">
+      <!-- shop-cart 组件-->
       <shop-cart
         ref="shopCart"
-        :select-food="selectedFoods"
+        :select-foods="selectedFoods"
         :delivery-price="seller.deliveryPrice"
         :min-price="seller.minPrice"
       >
@@ -56,6 +58,7 @@
 <script>
   import { getGoods } from 'api'
   import ShopCart from 'components/shop-cart/shop-cart'
+  import CartControl from 'components/cart-control/cart-control'
 
   export default {
     name: 'goods',
@@ -81,9 +84,21 @@
     computed: {
       seller () {
         return this.data.seller
+      },
+      selectedFoods () {
+        let foods = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     methods: {
+      // 接受foods数据
       fetch () {
         getGoods().then((goods) => {
           this.goods = goods
@@ -92,7 +107,8 @@
       }
     },
     components: {
-      ShopCart
+      ShopCart,
+      CartControl
     }
   }
 </script>
