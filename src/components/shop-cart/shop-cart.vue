@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="shopcart">
-      <div class="content">
+      <!--点击shopcart组件 出现购物清单-->
+      <div class="content" @click="toggleList">
         <div class="content-left">
           <div class="logo-wrapper">
             <div class="logo" :class="{'highlight':totalCount>0}">
@@ -84,6 +85,7 @@
     },
     created () {
       this.dropBalls = []
+      this.listFold = true
     },
     computed: {
       // 计算总金额
@@ -123,6 +125,39 @@
       }
     },
     methods: {
+      // 切换
+      toggleList () {
+        if (this.listFold) {
+          if (!this.totalCount) {
+            return
+          }
+          this.listFold = false
+          this._showShopCartList()
+        } else {
+          this.listFold = true
+          this._hideShopCartList()
+        }
+      },
+      _showShopCartList () {
+        this.shopCartList = this.shopCartList || this.$createShopCartList({
+          $props: {
+            selectFoods: 'selectFoods'
+          },
+          // 订阅事件
+          $events: {
+            hide: () => {
+              // 箭头函数保留上下文
+              this.listFold = true
+            }
+          }
+        })
+        // this.shopCartList 这个时候就像是API调用一样 可以直接调用
+        this.shopCartList.show()
+      },
+      _hideShopCartList () {
+        this.shopCartList.hide()
+      },
+      // ----------------------
       // 保存小球的状态
       drop (el) {
         for (let i = 0; i < this.balls.length; i++) {
