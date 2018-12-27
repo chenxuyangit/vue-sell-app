@@ -12,6 +12,8 @@
 </template>
 
 <script>
+  const EVENT_ADD = 'add'
+
   export default {
     name: 'cart-control',
     props: {
@@ -20,7 +22,7 @@
       }
     },
     methods: {
-      add () {
+      add (event) {
         if (!this.food.count) {
           // Vue.set( target, key, value )
           // 它必须用于向响应式对象上添加新属性，因为 Vue 无法探测普通的新增属性
@@ -28,6 +30,9 @@
         } else {
           this.food.count++
         }
+        // 小球组件订阅事件传值
+        this.$emit(EVENT_ADD, event.target)
+        console.log('add')
       },
       decrease () {
         if (this.food.count) {

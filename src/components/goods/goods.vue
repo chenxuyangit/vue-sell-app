@@ -7,6 +7,31 @@
         :options="scrollOptions"
         v-if="goods.length"
       >
+        <template slot="bar" slot-scope="props">
+          <!--不使用props 自己构造文案对象-->
+          <!--txts 使用props.txts相当于 子组件cube-scroll-nav-panel的内容-->
+          <cube-scroll-nav-bar
+            direction="vertical"
+            :labels="props.labels"
+            :current="props.current"
+            :txts="barTxts"
+          >
+            <!--这里下面的props.txt相当于我们父组件传入的数据的每一个对象-->
+            <template slot-scope="props">
+              <div class="text">
+                <support-ico
+                  v-if="props.txt.type>=1"
+                  :size=3
+                  :type="props.txt.type"
+                ></support-ico>
+                <span>{{props.txt.name}}</span>
+                <span class="num" v-if="props.txt.count">
+                  <bubble :num="props.txt.count"></bubble>
+                </span>
+              </div>
+            </template>
+          </cube-scroll-nav-bar>
+        </template>
         <cube-scroll-nav-panel
           v-for="good in goods"
           :key="good.name"
@@ -34,7 +59,7 @@
                 </div>
                 <div class="cart-control-wrapper">
                   <!-- cart-contol 组件-->
-                  <cart-control :food="food"></cart-control>
+                  <cart-control @add="onAdd" :food="food"></cart-control>
                 </div>
               </div>
             </li>
@@ -59,6 +84,8 @@
   import { getGoods } from 'api'
   import ShopCart from 'components/shop-cart/shop-cart'
   import CartControl from 'components/cart-control/cart-control'
+  import SupportIco from 'components/support-ico/support-ico/'
+  import Bubble from 'components/bubble/bubble'
 
   export default {
     name: 'goods',
@@ -95,6 +122,23 @@
           })
         })
         return foods
+      },
+      // 生成一个自定义的txt
+      barTxts () {
+        let ret = []
+        this.goods.forEach((good) => {
+          const { type, name, foods } = good
+          let count = 0
+          foods.forEach((food) => {
+            count += food.count || 0
+          })
+          ret.push({
+            type,
+            name,
+            count
+          })
+        })
+        return ret
       }
     },
     methods: {
@@ -104,11 +148,17 @@
           this.goods = goods
           // console.log(this.goods)
         })
+      },
+      onAdd (target) {
+        this.$refs.shopCart.drop(target)
+        console.log('onAdd')
       }
     },
     components: {
       ShopCart,
-      CartControl
+      CartControl,
+      SupportIco,
+      Bubble
     }
   }
 </script>
