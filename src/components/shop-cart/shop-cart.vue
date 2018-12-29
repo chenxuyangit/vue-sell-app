@@ -15,7 +15,7 @@
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
-        <div class="content-right">
+        <div class="content-right" @click="pay">
           <div class="pay" :class="payClass">
             {{payDesc}}
           </div>
@@ -127,7 +127,7 @@
       },
       // 结算状态点亮
       payClass () {
-        if (!this.totalCount || this.totalCount < this.minPrice) {
+        if (!this.totalPrice || this.totalPrice < this.minPrice) {
           return 'no-enough'
         } else {
           return 'enough'
@@ -148,6 +148,17 @@
           this.listFold = true
           this._hideShopCartList()
         }
+      },
+      // 支付
+      pay (e) {
+        if (this.totalPrice < this.minPrice) {
+          return
+        }
+        this.$createDialog({
+          title: '支付',
+          content: `您需要支付¥${this.totalPrice}元`
+        }).show()
+        e.stopPropagation()
       },
       _showShopCartList () {
         this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
@@ -233,6 +244,12 @@
       // 这里需要监听fold 值的变化，变化后改变其值，这样toggleList就可以正常切换了
       fold (newVal) {
         this.listFold = newVal
+      },
+      // 监听totalCount 隐藏菜单
+      totalCount (count) {
+        if (!this.listFold && count === 0) {
+          this._hideShopCartList()
+        }
       }
     },
     components: {

@@ -15,7 +15,7 @@
         <div v-show="visible">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="empty">清空</span>
           </div>
           <!--超出上限 就会出现滑动模块-->
           <cube-scroll class="list-content" ref="listContent">
@@ -77,6 +77,22 @@
       onLeave () {
         // 在动画完成后销毁组件sticky
         this.$emit(EVENT_LEAVE)
+      },
+      // 清空购物车
+      empty () {
+        this.dialogComp = this.$createDialog({
+          type: 'confirm',
+          content: '清空购物车？',
+          $events: {
+            confirm: () => {
+              this.selectFoods.forEach((good) => {
+                good.count = 0
+              })
+              this.hide()
+            }
+          }
+        })
+        this.dialogComp.show()
       }
     },
     // computed:{
