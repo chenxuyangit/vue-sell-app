@@ -43,12 +43,15 @@
 
 <script>
   import CartControl from 'components/cart-control/cart-control'
+  import popupmixin from 'common/mixins/popup'
 
-  const EVENT_HIDE = 'hide'
+  // const EVENT_HIDE = 'hide'
   const EVENT_LEAVE = 'leave'
+  const EVENT_SHOW = 'show'
 
   export default {
     name: 'shop-cart-list',
+    mixins: [popupmixin],
     props: {
       selectFoods: {
         type: Array,
@@ -57,20 +60,27 @@
         }
       }
     },
-    data () {
-      return {
-        visible: false
-      }
+    // 混入Mixin之后我们可以监听show事件
+    created () {
+      this.$on(EVENT_SHOW, () => {
+        this.$nextTick(() => {
+          this.$refs.listContent.refresh()
+        })
+      })
     },
     methods: {
-      show () {
-        this.visible = true
-      },
-      hide () {
-        this.visible = false
-        // 派发事件 如果不派发事件 maskClick之后再点击shop-cart组件 会有一次不管用
-        this.$emit(EVENT_HIDE)
-      },
+      // show () {
+      //   this.visible = true
+      //   // 重新渲染DOM高度
+      //   this.$nextTick(() => {
+      //     this.$refs.listContent.refresh()
+      //   })
+      // },
+      // hide () {
+      //   this.visible = false
+      //   // 派发事件 如果不派发事件 maskClick之后再点击shop-cart组件 会有一次不管用
+      //   this.$emit(EVENT_HIDE)
+      // },
       maskClick () {
         this.hide()
       },
@@ -91,8 +101,7 @@
               this.hide()
             }
           }
-        })
-        this.dialogComp.show()
+        }).show()
       }
     },
     // computed:{
