@@ -69,13 +69,6 @@
       })
     },
     methods: {
-      // show () {
-      //   this.visible = true
-      //   // 重新渲染DOM高度
-      //   this.$nextTick(() => {
-      //     this.$refs.listContent.refresh()
-      //   })
-      // },
       // hide () {
       //   this.visible = false
       //   // 派发事件 如果不派发事件 maskClick之后再点击shop-cart组件 会有一次不管用

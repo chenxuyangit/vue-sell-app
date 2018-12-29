@@ -40,6 +40,7 @@
         >
           <ul>
             <li
+              @click="selectFood(food)"
               v-for="food in good.foods"
               :key="food.name"
               class="food-item"
@@ -156,6 +157,19 @@
       onAdd (target) {
         this.$refs.shopCart.drop(target)
         console.log('onAdd')
+      },
+      // 传递selectedFood给food createrAPI
+      selectFood (food) {
+        this.selectedFood = food
+        this._showFood()
+      },
+      _showFood () {
+        this.foodComp = this.foodComp || this.$createFood({
+          $props: {
+            food: 'selectedFood'
+          }
+        })
+        this.foodComp.show()
       }
     },
     components: {
