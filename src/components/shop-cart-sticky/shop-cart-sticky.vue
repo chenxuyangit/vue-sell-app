@@ -1,0 +1,75 @@
+<template>
+  <div class="shop-cart-sticky" v-show="visible">
+    <shop-cart
+      ref="shopCart"
+      :selectFoods="selectFoods"
+      :deliveryPrice="deliveryPrice"
+      :minPrice="minPrice"
+      :fold="fold"
+      :sticky="true"
+    ></shop-cart>
+  </div>
+</template>
+
+<script>
+  import ShopCart from 'components/shop-cart/shop-cart'
+
+  export default {
+    name: 'shop-cart-sticky',
+    props: {
+      // 选择商品
+      selectFoods: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      // 配送费
+      deliveryPrice: {
+        type: Number,
+        default: 0
+      },
+      // 到货最小金额
+      minPrice: {
+        type: Number,
+        default: 0
+      },
+      fold: {
+        type: Boolean,
+        default: true
+      },
+      list: {
+        type: Object,
+        default() {
+          return {}
+        }
+      }
+    },
+    data () {
+      return {
+        visible: false
+      }
+    },
+    methods: {
+      show () {
+        this.visible = true
+      },
+      hide () {
+        this.visible = false
+      }
+    },
+    components: {
+      ShopCart
+    }
+  }
+</script>
+
+<style lang="stylus" scoped>
+  .shop-cart-sticky
+    position: absolute
+    left: 0
+    bottom: 0
+    z-index: 999
+    width: 100%
+    height: 48px
+</style>

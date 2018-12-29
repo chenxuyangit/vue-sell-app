@@ -76,16 +76,26 @@
       minPrice: {
         type: Number,
         default: 0
+      },
+      fold: {
+        type: Boolean,
+        default: true
+      },
+      sticky: {
+        type: Boolean,
+        default: false
       }
     },
+    // 这里只是初始化的参数，后来fold发生变化后没有关联了。见watch
     data () {
       return {
-        balls: createBalls()
+        balls: createBalls(),
+        listFold: this.fold
       }
     },
+    // 初始化参数 created 和直接在之前data，等定义有什么区别
     created () {
       this.dropBalls = []
-      this.listFold = true
     },
     computed: {
       // 计算总金额
@@ -133,13 +143,14 @@
           }
           this.listFold = false
           this._showShopCartList()
+          this._showShopCartSticky()
         } else {
           this.listFold = true
           this._hideShopCartList()
         }
       },
       _showShopCartList () {
-        this.shopCartList = this.shopCartList || this.$createShopCartList({
+        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
           $props: {
             selectFoods: 'selectFoods'
           },
@@ -148,14 +159,34 @@
             hide: () => {
               // 箭头函数保留上下文
               this.listFold = true
+              // this._hideShopCartSticky()
+            },
+            leave: () => {
+              this._hideShopCartSticky()
             }
           }
         })
-        // this.shopCartList 这个时候就像是API调用一样 可以直接调用
-        this.shopCartList.show()
+        // this.shopCartListComp 这个时候就像是API调用一样 可以直接调用
+        this.shopCartListComp.show()
+      },
+      _showShopCartSticky () {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            deliveryPrice: 'deliveryPrice',
+            minPrice: 'minPrice',
+            fold: 'listFold',
+            list: this.shopCartListComp
+          }
+        })
+        this.shopCartStickyComp.show()
       },
       _hideShopCartList () {
-        this.shopCartList.hide()
+        const list = this.sticky ? this.$parent.list : this.shopCartListComp
+        list.hide && list.hide()
+      },
+      _hideShopCartSticky () {
+        this.shopCartStickyComp.hide()
       },
       // ----------------------
       // 保存小球的状态
@@ -196,6 +227,12 @@
           ball.show = false
           el.style.display = 'none'
         }
+      }
+    },
+    watch: {
+      // 这里需要监听fold 值的变化，变化后改变其值，这样toggleList就可以正常切换了
+      fold (newVal) {
+        this.listFold = newVal
       }
     },
     components: {
