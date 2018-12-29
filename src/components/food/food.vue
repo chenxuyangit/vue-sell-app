@@ -1,6 +1,7 @@
 <template>
   <transition
     name="move"
+    @after-leave="afterleave"
   >
     <div class="food" v-show="visible">
       <cube-scroll ref="scroll">
@@ -21,6 +22,14 @@
             <div class="price">
               <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
             </div>
+            <div class="cart-control-wrapper">
+              <cart-control @add="addFood" :food="food"></cart-control>
+            </div>
+            <transition name="fade">
+              <div class="buy" v-show="!food.count" @click.stop="addFirst">
+                加入购物车
+              </div>
+            </transition>
           </div>
           <split v-show="food.info"></split>
           <div class="info" v-show="food.info">
@@ -36,9 +45,13 @@
 
 <script type="text/ecmascript-6">
   import Split from 'components/split/split'
+  import CartControl from 'components/cart-control/cart-control'
   import popupmixin from 'common/mixins/popup'
 
   const EVENT_SHOW = 'show'
+  const EVENT_ADD = 'add'
+  const EVENT_LEAVE = 'leave'
+
   export default {
     name: 'food',
     mixins: [popupmixin],
@@ -54,8 +67,21 @@
         })
       })
     },
+    methods: {
+      addFirst (event) {
+        this.$set(this.food, 'count', 1)
+        this.$emit(EVENT_ADD, event.target)
+      },
+      afterleave () {
+        this.$emit(EVENT_LEAVE)
+      },
+      addFood (target) {
+        this.$emit(EVENT_ADD, target)
+      }
+    },
     components: {
-      Split
+      Split,
+      CartControl
     }
   }
 </script>

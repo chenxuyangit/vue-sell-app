@@ -72,7 +72,7 @@
       <!-- shop-cart 组件-->
       <shop-cart
         ref="shopCart"
-        :select-foods="selectedFoods"
+        :select-foods="selectFoods"
         :delivery-price="seller.deliveryPrice"
         :min-price="seller.minPrice"
       >
@@ -113,7 +113,7 @@
       seller () {
         return this.data.seller
       },
-      selectedFoods () {
+      selectFoods () {
         let foods = []
         this.goods.forEach((good) => {
           good.foods.forEach((food) => {
@@ -158,18 +158,42 @@
         this.$refs.shopCart.drop(target)
         console.log('onAdd')
       },
-      // 传递selectedFood给food createrAPI
+      // 传递selectedFood给food createAPI
       selectFood (food) {
         this.selectedFood = food
         this._showFood()
+        this._showShopCartSticky()
       },
       _showFood () {
         this.foodComp = this.foodComp || this.$createFood({
           $props: {
             food: 'selectedFood'
+          },
+          $events: {
+            leave: () => {
+              this._hideShopCartSticky()
+            },
+            add: (el) => {
+              // console.log(this.shopCartStickyComp)
+              this.shopCartStickyComp.drop(el)
+            }
           }
         })
         this.foodComp.show()
+      },
+      _showShopCartSticky () {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            minPrice: this.seller.minPrice,
+            deliveryPrice: this.seller.deliveryPrice,
+            fold: true
+          }
+        })
+        this.shopCartStickyComp.show()
+      },
+      _hideShopCartSticky () {
+        this.shopCartStickyComp.hide()
       }
     },
     components: {
