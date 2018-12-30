@@ -15,6 +15,7 @@ export default {
     hide() {
       this.visible = false
       this.$emit(EVENT_HIDE)
+      // console.log('hide')
     }
   }
 }
