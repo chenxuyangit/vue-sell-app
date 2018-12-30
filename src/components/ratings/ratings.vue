@@ -1,5 +1,5 @@
 <template>
-  <cube-scroll ref="scroll" class="ratings" :options="scrollOptions">
+  <cube-scroll ref="scroll" class="ratings" :data="computedRatings" :options="scrollOptions">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -27,10 +27,17 @@
         </div>
       </div>
       <split></split>
+      <rating-select
+        @select="onSelect"
+        @toggle="onToggle"
+        :selectType="selectType"
+        :onlyContent="onlyContent"
+        :ratings="ratings"
+      ></rating-select>
       <div class="rating-wrapper">
         <ul>
           <li
-            v-for="(rating,index) in ratings"
+            v-for="(rating,index) in computedRatings"
             :key="index"
             class="rating-item border-bottom-1px"
           >
@@ -42,7 +49,7 @@
               <div class="star-wrapper">
                 <!--星星-->
                 <star :size="24" :score="rating.score"></star>
-                <span class="delivery" v-show="rating.deliveryTime">{{rating.deliveryTime}}</span>
+                <span class="delivery" v-show="rating.deliveryTime">送货时间:{{rating.deliveryTime}}分钟</span>
               </div>
               <p class="text">{{rating.text}}</p>
               <div class="recommend" v-show="rating.recommend && rating.recommend.length">
@@ -69,11 +76,16 @@
 <script>
   import Star from 'components/star/star'
   import Split from 'components/split/split'
+  import RatingSelect from 'components/rating-select/rating-select'
+
+  import ratingMixin from 'common/mixins/rating'
+
   import { getRatings } from 'api'
   import moment from 'moment'
 
   export default {
     name: 'ratings',
+    mixins: [ratingMixin],
     props: {
       data: {
         type: Object
@@ -81,7 +93,7 @@
     },
     data () {
       return {
-        ratings: {},
+        ratings: [],
         scrollOptions: {
           click: false,
           directionLockThreshold: 0
@@ -108,7 +120,8 @@
     },
     components: {
       Star,
-      Split
+      Split,
+      RatingSelect
     }
   }
 </script>
