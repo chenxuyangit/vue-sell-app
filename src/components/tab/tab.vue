@@ -50,7 +50,7 @@
     data () {
       return {
         // index : this.initialIndex
-        index: 1,
+        index: 0,
         slideOptions: {
           listenScroll: true,
           probeType: 3

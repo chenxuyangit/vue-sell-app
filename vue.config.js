@@ -1,13 +1,14 @@
 // node
-// const webpack = require('webpack')
+const webpack = require('webpack')
 const path = require('path')
 
 const appData = require('./data.json')
 const seller = appData.seller
 const goods = appData.goods
 const ratings = appData.ratings
+
 // 拼接路径
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -32,9 +33,10 @@ module.exports = {
   devServer: {
     before (app) {
       app.get('/api/seller', function (req, res) {
+        const id = req.query.id
         res.json({
           errno: 0,
-          data: seller
+          data: Object.assign({}, seller, { id })
         })
       })
       app.get('/api/goods', function (req, res) {
@@ -52,10 +54,14 @@ module.exports = {
     }
   },
   // 设置路径为绝对路径
-  chainWebpack(config){
+  chainWebpack (config) {
     config.resolve.alias
       .set('components', resolve('src/components'))
       .set('common', resolve('src/common'))
       .set('api', resolve('src/api'))
+
+    config.plugin('context')
+      .use(webpack.ContextReplacementPlugin,
+        [/moment[/\\]locale$/, /zh-cn/])
   }
 }

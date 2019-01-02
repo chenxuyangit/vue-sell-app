@@ -15,16 +15,19 @@
   import Ratings from 'components/ratings/ratings'
   import Seller from 'components/seller/seller'
   import Tab from 'components/tab/tab'
+  import qs from 'query-string'
 
   export default {
     name: 'app',
     data () {
       return {
-        seller: {}
+        seller: {
+          id: qs.parse(location.search).id
+        }
       }
     },
     computed: {
-      tabs() {
+      tabs () {
         return [
           {
             label: '商品',
@@ -55,7 +58,10 @@
     },
     methods: {
       _getSeller () {
-        getSeller().then((seller) => {
+        getSeller({
+          id: this.seller.id
+        }).then((seller) => {
+          // 这里seller 发生了改变 以后取id 因为属性没有id所以取不到
           this.seller = seller
           console.log('数据请求成功')
         })

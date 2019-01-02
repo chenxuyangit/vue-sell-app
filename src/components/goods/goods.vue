@@ -148,7 +148,9 @@
         // 切换的时候还会从新获取数据，所以之前count记录会没有，我们需要只有第一次的时候获取数据
         if (!this.fetched) {
           this.fetched = true
-          getGoods().then((goods) => {
+          getGoods({
+            id: this.seller.id
+          }).then((goods) => {
             this.goods = goods
             // console.log(this.goods)
           })

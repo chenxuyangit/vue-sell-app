@@ -109,7 +109,9 @@
       fetch () {
         if (!this.fetched) {
           this.fetched = true
-          getRatings().then((ratings) => {
+          getRatings({
+            id: this.seller.id
+          }).then((ratings) => {
             this.ratings = ratings
           })
         }
